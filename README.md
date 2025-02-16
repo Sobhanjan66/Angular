@@ -387,6 +387,203 @@ studentList: any[] = [
 - **CommonModule** and **FormsModule** must be imported to use directives like `*ngIf`, `*ngFor`, and `ngModel`.
 
 By mastering Angular directives, you can build dynamic and efficient applications with clean and reusable code.
+
+
+## Attribute Directives in Angular
+
+Attribute directives in Angular are used to dynamically change the appearance or behavior of elements. Unlike structural directives (which add or remove elements from the DOM), attribute directives only affect the element they are applied to.
+
+---
+
+### 1. **Built-in Attribute Directives**
+Angular provides several built-in attribute directives, including:
+
+- `ngClass`: Dynamically adds or removes classes.
+- `ngStyle`: Dynamically applies inline styles.
+- `ngModel`: Two-way data binding for form elements.
+
+#### Example 1: Using `ngClass`
+**Objective**: Toggle between different styles based on a condition.
+
+**HTML:**
+```html
+<p [ngClass]="{'text-success': isActive, 'text-danger': !isActive}">This text changes color.</p>
+<button (click)="toggleStatus()" class="btn btn-primary">Toggle Status</button>
 ```
 
-    
+**TypeScript:**
+```typescript
+isActive: boolean = true;
+
+toggleStatus() {
+  this.isActive = !this.isActive;
+}
+```
+
+**Output:** The text toggles between green (`text-success`) and red (`text-danger`).
+
+---
+
+#### Example 2: Using `ngStyle`
+**Objective**: Change the font size dynamically.
+
+**HTML:**
+```html
+<p [ngStyle]="{'font-size.px': fontSize}">Dynamic Font Size</p>
+<button (click)="increaseFont()" class="btn btn-success">Increase Font</button>
+<button (click)="decreaseFont()" class="btn btn-danger">Decrease Font</button>
+```
+
+**TypeScript:**
+```typescript
+fontSize: number = 16;
+
+increaseFont() {
+  this.fontSize += 2;
+}
+
+decreaseFont() {
+  this.fontSize -= 2;
+}
+```
+
+**Output:** Clicking the buttons increases or decreases the font size.
+
+---
+
+#### Example 3: Using `ngModel`
+**Objective**: Bind input value to a variable.
+
+**HTML:**
+```html
+<input type="text" [(ngModel)]="userName" placeholder="Enter Name" class="form-control mb-2">
+<p>Hello, {{ userName }}</p>
+```
+
+**TypeScript:**
+```typescript
+userName: string = "";
+```
+
+**Output:** The paragraph displays the entered text dynamically.
+
+---
+
+### 2. **Custom Attribute Directives**
+You can create custom attribute directives to encapsulate specific behavior.
+
+#### Example 1: Creating a `highlight` Directive
+**Objective**: Change background color on hover.
+
+**TypeScript (Directive File):**
+```typescript
+import { Directive, ElementRef, HostListener, Input } from '@angular/core';
+
+@Directive({
+  selector: '[appHighlight]'
+})
+export class HighlightDirective {
+  @Input() defaultColor: string = 'yellow';
+  @Input() hoverColor: string = 'lightblue';
+
+  constructor(private el: ElementRef) {
+    this.el.nativeElement.style.backgroundColor = this.defaultColor;
+  }
+
+  @HostListener('mouseenter') onMouseEnter() {
+    this.el.nativeElement.style.backgroundColor = this.hoverColor;
+  }
+
+  @HostListener('mouseleave') onMouseLeave() {
+    this.el.nativeElement.style.backgroundColor = this.defaultColor;
+  }
+}
+```
+
+**HTML (Using the Directive):**
+```html
+<p appHighlight defaultColor="pink" hoverColor="lightgreen">Hover over this text.</p>
+```
+
+**Output:** The background color changes on hover.
+
+---
+
+#### Example 2: Creating a `disableButton` Directive
+**Objective**: Disable a button based on a condition.
+
+**TypeScript (Directive File):**
+```typescript
+import { Directive, ElementRef, Input, OnChanges } from '@angular/core';
+
+@Directive({
+  selector: '[appDisableButton]'
+})
+export class DisableButtonDirective implements OnChanges {
+  @Input() appDisableButton: boolean = false;
+
+  constructor(private el: ElementRef) {}
+
+  ngOnChanges() {
+    this.el.nativeElement.disabled = this.appDisableButton;
+  }
+}
+```
+
+**HTML (Using the Directive):**
+```html
+<button appDisableButton="isDisabled" class="btn btn-warning">Click Me</button>
+<button (click)="toggleDisable()" class="btn btn-secondary">Toggle Disable</button>
+```
+
+**TypeScript:**
+```typescript
+isDisabled: boolean = false;
+
+toggleDisable() {
+  this.isDisabled = !this.isDisabled;
+}
+```
+
+**Output:** The button gets disabled or enabled when toggled.
+
+---
+
+### 3. **Applying Multiple Attribute Directives**
+You can use multiple directives together.
+
+#### Example: Combining `ngClass` and `ngStyle`
+**Objective**: Change text color and font size dynamically.
+
+**HTML:**
+```html
+<p [ngClass]="{'text-primary': isBlue}" [ngStyle]="{'font-size.px': fontSize}">Styled Text</p>
+<button (click)="toggleColor()" class="btn btn-info">Toggle Color</button>
+<button (click)="increaseFont()" class="btn btn-success">Increase Font</button>
+```
+
+**TypeScript:**
+```typescript
+isBlue: boolean = true;
+fontSize: number = 14;
+
+toggleColor() {
+  this.isBlue = !this.isBlue;
+}
+
+increaseFont() {
+  this.fontSize += 2;
+}
+```
+
+**Output:** Clicking the buttons changes the text color and font size.
+
+---
+
+## Summary
+- **Built-in Attribute Directives:** `ngClass`, `ngStyle`, `ngModel`
+- **Custom Attribute Directives:** Extend element behavior using `@Directive`.
+- **Usage Scenarios:** Dynamic styling, hover effects, conditional disabling, and more.
+
+By mastering attribute directives, you can create interactive and dynamic applications with Angular!
+  
