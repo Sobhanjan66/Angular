@@ -436,128 +436,136 @@ studentList: any[] = [
 
 By mastering Angular directives, you can build dynamic and efficient applications with clean and reusable code.
 
-```
 
+# Attribute Directives in Angular
 
-Attribute Directives:
-Attribute directives change the appearance or behavior of an element, component, or another directive. Essentially, it is a class annotated with the Directive decorator where you specify what change you want to occur and what CSS event (if any) you want to trigger that change.
+## Overview
+Attribute directives change the appearance or behavior of an element, component, or another directive. Essentially, it is a class annotated with the `@Directive` decorator where you specify what change you want to occur and what CSS event (if any) you want to trigger that change.
 
-1. ngClass:
-Helps to apply dynamic class.
+## 1. `ngClass`
+### Helps to apply dynamic classes.
 
-Example 1:
+### Example 1: Toggle Class Using Buttons
+#### Objective: Change the color of the div using two buttons.
 
-Suppose we have a div, called div-1, & have two buttons named: Add Red & Add Blue. we want to change the colour of the div using those buttons. we can achieve it using ngClass as follows:
-
-.html file:
-
+**HTML:**
+```html
 <div class="p-3 text-center" [ngClass]="div1BgColor">
-<h4>Div-1</h4>
+  <h4>Div-1</h4>
 </div>
 
 <div>
-<button class="btn btn-danger" (click)="addRedClass()">Add Red</button>
-<button class="btn btn-Primary" (click)="addBlueClass()">Add Blue</button>
+  <button class="btn btn-danger" (click)="addRedClass()">Add Red</button>
+  <button class="btn btn-primary" (click)="addBlueClass()">Add Blue</button>
 </div>
+```
 
-.ts file:
-
-imports: [commonModule],
+**TypeScript:**
+```typescript
+import { CommonModule } from '@angular/common';
 
 div1BgColor: string = "";
 
 addRedClass(){
-this.div1BgColor = "bg-danger"
+  this.div1BgColor = "bg-danger";
 }
 
 addBlueClass(){
-this.div1BgColor = "bg-primary"
+  this.div1BgColor = "bg-primary";
 }
+```
 
-Example 2:
+### Example 2: Toggle Class with a Single Button
+#### Objective: Change div color using a single button.
 
-Suppose we want to do it with a single button called toggle.
-
-.html file:
-
-<div class="p-3 text-center" [ngClass]="isDiv2Active?'bg-success' : 'bg-warning'">
-<h4>Div-2</h4>
+**HTML:**
+```html
+<div class="p-3 text-center" [ngClass]="isDiv2Active ? 'bg-success' : 'bg-warning'">
+  <h4>Div-2</h4>
 </div>
 
 <div>
-<button class="btn btn-primary" (click)="toggleBgColor()">Toggle</button>
+  <button class="btn btn-primary" (click)="toggleBgColor()">Toggle</button>
 </div>
+```
 
-.ts file:
-
-imports: [commonModule],
+**TypeScript:**
+```typescript
+import { CommonModule } from '@angular/common';
 
 isDiv2Active: boolean = false;
 
 toggleBgColor(){
-this.isDiv2Active = !this.isDiv2Active
+  this.isDiv2Active = !this.isDiv2Active;
 }
+```
 
+### Example 3: Dynamic Class Based on Input Values
+#### Objective: Change div color when two input values match.
 
-Example 3:
-Now in case of 3rd div, we have two input fields, if we put the same value in both fields then only div colour will change.
-
-.html file:
-
-<div class="p-3 text-center" [ngClass]="num1==num2 ? 'bg-secondary' : 'bg-danger' ">
-<h4>Div-3</h4>
+**HTML:**
+```html
+<div class="p-3 text-center" [ngClass]="num1 == num2 ? 'bg-secondary' : 'bg-danger'">
+  <h4>Div-3</h4>
 </div>
 
 <div>
-<input type="text" [(ngModel)]="num1">
-<input type="text" [(ngModel)]="num2">
+  <input type="text" [(ngModel)]="num1">
+  <input type="text" [(ngModel)]="num2">
 </div>
+```
 
-.ts file:
-
-imports: [commonModule,FormsModule],
+**TypeScript:**
+```typescript
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 num1: string = "";
 num2: string = "";
+```
 
+### Example 4: Class Binding Based on Checkbox
+#### Objective: Change div color based on checkbox status.
 
-Example 4:
-
-Div Colour will change based on Checkbox status.
-
-.html file:
-
-<div class="p-3 text-center" [ngClass]="isActive ? 'bg-success' : 'bg-danger' ">
-<h4>Div-4</h4>
+**HTML:**
+```html
+<div class="p-3 text-center" [ngClass]="isActive ? 'bg-success' : 'bg-danger'">
+  <h4>Div-4</h4>
 </div>
 
 <div>
-<input type="chekbox" [(ngModel)]="isActive">
+  <input type="checkbox" [(ngModel)]="isActive">
 </div>
+```
 
-.ts file:
-
-imports: [commonModule,FormsModule],
+**TypeScript:**
+```typescript
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 isActive: boolean = false;
+```
 
+---
 
-2. ngStyle:
-Used to apply dynamic syling in HTML elements.
+## 2. `ngStyle`
+### Used to apply dynamic styling to HTML elements.
 
-Example 1:
+### Example: Dynamic Styling for a Student List
+#### Objective: Display a table with dynamic styling based on student properties.
 
-.ts file:
-
+**TypeScript:**
+```typescript
 studentList: any[] = [
-  { studId: 1, totalMarks:23, gender: male, name: "John", city: "Kolkata", isActive: true },
-  { studId: 2, totalMarks:53, gender: female, name: "Alice", city: "Delhi", isActive: false },
-  { studId: 3, totalMarks:47, gender: female, name: "Bob", city: "Mumbai", isActive: true },
-  { studId: 4, totalMarks:93, gender: male, name: "Eve", city: "Chennai", isActive: false },
+  { studId: 1, totalMarks: 23, gender: 'male', name: "John", city: "Kolkata", isActive: true },
+  { studId: 2, totalMarks: 53, gender: 'female', name: "Alice", city: "Delhi", isActive: false },
+  { studId: 3, totalMarks: 47, gender: 'female', name: "Bob", city: "Mumbai", isActive: true },
+  { studId: 4, totalMarks: 93, gender: 'male', name: "Eve", city: "Chennai", isActive: false },
 ];
+```
 
-.html file:
-
+**HTML:**
+```html
 <table class="table table-bordered mt-3">
   <thead>
     <tr>
@@ -572,22 +580,29 @@ studentList: any[] = [
     <tr *ngFor="let stud of studentList">
       <td>{{stud.name}}</td>
       <td>{{stud.city}}</td>
-       <td [ngStyle]="{'background-color':stud.isActive ? 'Green' : 'Red'}">
-        <span> {{stud.isActive ? 'Active' : 'DeActive'}} </span>
+      <td [ngStyle]="{'background-color': stud.isActive ? 'green' : 'red'}">
+        <span> {{ stud.isActive ? 'Active' : 'DeActive' }} </span>
       </td>
       <td>{{stud.gender}}</td>
       <td>
-       <div class="progress">
-            <div class="progress-bar" role="progressbar" aria-valuenow="70"
-            aria-valuemin="0" aria-valuemax="100" [ngStyle]="{'width':stud.totalMarks+'%'}">
-              {{stud.totalMarks}}
-            </div>
+        <div class="progress">
+          <div class="progress-bar" role="progressbar" aria-valuenow="70"
+               aria-valuemin="0" aria-valuemax="100" [ngStyle]="{'width': stud.totalMarks + '%'}">
+            {{ stud.totalMarks }}
           </div>
+        </div>
       </td>
     </tr>
   </tbody>
 </table>
-
-
-
 ```
+
+---
+
+## Summary
+- `ngClass`: Dynamically apply CSS classes based on conditions.
+- `ngStyle`: Dynamically apply inline styles based on conditions.
+- `CommonModule` and `FormsModule` must be imported to use directives like `ngClass`, `ngStyle`, and `ngModel`.
+
+By mastering Angular attribute directives, you can build dynamic and interactive applications with minimal effort!
+
