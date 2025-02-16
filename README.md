@@ -606,3 +606,165 @@ studentList: any[] = [
 
 By mastering Angular attribute directives, you can build dynamic and interactive applications with minimal effort!
 
+
+# Angular 17 Routing Guide
+
+## Table of Contents
+- [Introduction to Routing](#introduction-to-routing)
+- [Setting Up Routes](#setting-up-routes)
+- [Implementing Navigation with a Navbar](#implementing-navigation-with-a-navbar)
+- [Using Router-Outlet](#using-router-outlet)
+- [Route Redirection](#route-redirection)
+  - [Redirecting from HTML](#1-redirecting-from-html)
+  - [Redirecting from TypeScript](#2-redirecting-from-typescript)
+
+---
+
+## Introduction to Routing
+Routing in **Angular 17** is simpler and uses **Standalone APIs**. We no longer need `NgModule` and instead use `provideRouter()` to define routes.
+
+---
+
+## Setting Up Routes
+
+Define the routes inside `app.routes.ts` using `Routes` and `provideRouter()`.
+
+### Example: Defining Routes in `app.routes.ts`
+```typescript
+import { Routes } from '@angular/router';
+import { provideRouter } from '@angular/router';
+
+import { AddEmployeeComponent } from './components/add-employee.component';
+import { DataBindingComponent } from './components/data-binding.component';
+import { AttributeDirectiveComponent } from './components/attribute-directive.component';
+
+export const routes: Routes = [
+  { path: 'add-emp', component: AddEmployeeComponent },
+  { path: 'data-binding', component: DataBindingComponent },
+  { path: 'attribute-directive', component: AttributeDirectiveComponent },
+  { path: '', redirectTo: '/add-emp', pathMatch: 'full' } // Default route
+];
+
+export const appRouter = provideRouter(routes);
+```
+
+> **Note:** No need for `RouterModule.forRoot(routes)`. Instead, we use `provideRouter(routes)`.
+
+---
+
+## Implementing Navigation with a Navbar
+
+To allow users to navigate between different routes, we’ll add a **Navbar** in `app.component.html`.
+
+### Step 1: Add Bootstrap to `index.html`
+Include Bootstrap for styling:
+```html
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+```
+
+### Step 2: Navbar Implementation in `app.component.html`
+```html
+<nav class="navbar navbar-dark bg-dark navbar-expand-lg">
+  <a class="navbar-brand" href="#">WebSiteName</a>
+  <ul class="navbar-nav">
+    <li class="nav-item">
+      <a class="nav-link" routerLink="add-emp" routerLinkActive="active">Add Employees</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" routerLink="data-binding" routerLinkActive="active">Data Binding</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" routerLink="attribute-directive" routerLinkActive="active">Attribute Directive</a>
+    </li>
+  </ul>
+</nav>
+```
+
+> **New Features in Angular 17**:  
+> - **`routerLinkActive="active"`** applies the `active` class to the current active route.
+
+---
+
+## Using Router-Outlet
+
+`Router-Outlet` dynamically loads the routed components.
+
+### Example:
+```html
+<div class="container">
+  <router-outlet></router-outlet>
+</div>
+```
+
+### Step 3: Configure `main.ts` to Use `appRouter`
+Modify `main.ts` to **bootstrap** the app with `provideRouter()`:
+```typescript
+import { bootstrapApplication } from '@angular/platform-browser';
+import { AppComponent } from './app/app.component';
+import { appRouter } from './app/app.routes';
+
+bootstrapApplication(AppComponent, {
+  providers: [appRouter]
+}).catch(err => console.error(err));
+```
+
+---
+
+## Route Redirection
+
+We can navigate between pages either **from HTML** or **from TypeScript**.
+
+### 1. Redirecting from HTML
+Use `[routerLink]` to navigate between components.
+
+#### Example:
+```html
+<button [routerLink]="['/attribute-directive']" class="btn btn-primary">
+  Go to Attribute Directive Page
+</button>
+```
+
+### 2. Redirecting from TypeScript
+We can navigate programmatically using the **Router service**.
+
+#### Step 1: Add Button in `structural-directive.component.html`
+```html
+<button (click)="navigateToAttribute()" class="btn btn-success">
+  Go to Attribute Directive Page
+</button>
+```
+
+#### Step 2: Implement Navigation in `structural-directive.component.ts`
+```typescript
+import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+
+@Component({
+  selector: 'app-structural-directive',
+  standalone: true,
+  templateUrl: './structural-directive.component.html'
+})
+export class StructuralDirectiveComponent {
+  constructor(private router: Router) {}
+
+  navigateToAttribute() {
+    this.router.navigateByUrl('/attribute-directive');
+  }
+}
+```
+
+> **Why `standalone: true`?**  
+> - Angular 17 allows **standalone components** without `NgModule`.
+
+---
+
+## Summary
+
+✅ **Define Routes** in `app.routes.ts` using `Routes` array.  
+✅ **Use `provideRouter()`** instead of `RouterModule`.  
+✅ **Use Router Links** (`routerLink`) in HTML for navigation.  
+✅ **Include `Router-Outlet`** to load components dynamically.  
+✅ **Redirect Users** using either **HTML** (`routerLink`) or **TypeScript** (`Router.navigateByUrl()`).  
+
+By implementing routing in Angular 17, we can build **modern single-page applications** with better performance and simpler code.
+
